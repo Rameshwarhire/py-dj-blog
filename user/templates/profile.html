@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.first_name == "" or user.last_name == "" %}
+<h3>Users Profile</h3>
+{% else %}
+<h3>{{user.first_name}} {{user.last_name}}'s Profile</h3>
+{% endif %}
+
+<br />
+<div class="content-section">
+    <div class="media">
+        <!--<img class="rounded-circle account-img" style="width:100px;height:100px;" src="{{ user.profile.image.url }}">-->
+        {% if user.profile.image.url == "" %}
+        <img class="rounded-circle account-img" style="width:100px;height:100px;" src="media/profile_pics/default.jpg">
+        {% else %}
+        <img class="rounded-circle account-img" style="width:100px;height:100px;" src="{{ user.profile.image.url }}">
+        {% endif %}
+        <div class="media-body">
+            <h2 class="account-heading" style="margin-left: 15px;">{{ user.username }}</h2>
+            <p class="text-secondary" style="margin-left: 15px;">{{ user.email }}</p>
+        </div>
+    </div>
+    <form method="POST" enctype="multipart/form-data"><!-- *IMP* enctype is use for send the file to the server -->
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Profile Info</legend>
+            {{ u_form|crispy }}
+            {{ p_form|crispy }}
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Update</button>
+        </div>
+        <br />
+        <br />
+    </form>
+</div>
+{% endblock %}
